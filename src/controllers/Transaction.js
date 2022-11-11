@@ -2,25 +2,26 @@ import Transaction from '../models/Transaction';
 
 class TransactionController {
   async store(req, res) {
+    const { repeatId, repeatThis, repeatEnd } = req.body.repeat.split('-');
+
+    for (let i = 0; i <= parseInt(lastOne, 10); i++) {
+      // continue from here
+    }
     try {
       const newTransaction = await Transaction.create(req.body);
-      const { id, name, email } = newTransaction;
-      return res.json({ id, name, email });
+      const {
+        type, description, value, expirationDay, status, year, month, repeat,
+      } = newTransaction;
+      return res.json({
+        type, description, value, expirationDay, status, year, month, repeat,
+      });
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);
     }
   }
 
-  async index(req, res) {
-    try {
-      const users = await Transaction.findAll({ attributes: ['id', 'name', 'email'] });
-      return res.json(users);
-    } catch (err) {
-      if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
-      return res.status(400).send(err);
-    }
-  }
+  // async index(req, res) {}
 
   async show(req, res) {
     try {

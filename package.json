@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "sucrase ./src -d ./dist --transforms imports",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "start": "node dist/server.js"
   },
   "author": "Aldair Garros",
   "license": "ISC",

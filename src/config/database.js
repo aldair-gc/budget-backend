@@ -13,7 +13,8 @@ module.exports = {
     underscoredAll: true,
     createdAt: 'created_at',
     updatedAt: 'updated_at',
-    expirationDay: 'expiration_day'
+    expirationDay: 'expiration_day',
+    userId: 'user_id',
   },
   dialectOptions: {
     timezone: 'America/Fortaleza',

@@ -13,11 +13,11 @@ export default class Transaction extends Model {
       },
       value: {
         type: DataTypes.FLOAT,
-        defaultValue: '',
+        defaultValue: 0.0,
       },
       expiration_day: {
         type: DataTypes.INTEGER,
-        defaultValue: '',
+        defaultValue: 0,
       },
       status: {
         type: DataTypes.STRING,
@@ -25,11 +25,11 @@ export default class Transaction extends Model {
       },
       year: {
         type: DataTypes.INTEGER,
-        defaultValue: '',
+        defaultValue: 0,
       },
       month: {
         type: DataTypes.INTEGER,
-        defaultValue: '',
+        defaultValue: 0,
       },
       repeat: {
         type: DataTypes.STRING,
@@ -40,5 +40,9 @@ export default class Transaction extends Model {
     });
 
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.User, { foreignKey: 'user_id' });
   }
 }

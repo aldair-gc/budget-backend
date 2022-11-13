@@ -1,33 +1,36 @@
 import Transaction from '../models/Transaction';
 
 class TransactionController {
+  // first repeat send as "0-1-'total'" and others as "id-'this'-'total'".
   async store(req, res) {
-    const { repeatId, repeatThis, repeatEnd } = req.body.repeat.split('-');
+    const { type, description, value, expiration_day, status, year, month, repeat } = req.body;
+    const { repeatId, repeatThis, repeatEnd } = repeat.split('-').map(x => Number(x));
+    console.log(repeatId, repeatThis, repeatEnd);
 
-    for (let i = 0; i <= parseInt(lastOne, 10); i++) {
-      // continue from here
-    }
-    try {
-      const newTransaction = await Transaction.create(req.body);
-      const {
-        type, description, value, expirationDay, status, year, month, repeat,
-      } = newTransaction;
-      return res.json({
-        type, description, value, expirationDay, status, year, month, repeat,
-      });
-    } catch (err) {
-      if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
-      return res.status(400).send(err);
-    }
+    // try {
+    //   for (repeatThis; repeatThis <= repeatEnd; repeatThis++) {
+    //     const thisRepeat = `${repeatId}-${repeatThis}-${repeatEnd}`;
+    //     const newTransaction = await Transaction.create(type, description, value, expirationDay, status, year, month, thisRepeat);
+    //     const { id, type, description, value, expirationDay, status, year, month } = newTransaction;
+    //     if (repeatThis === 1) repeatId = newId;
+    //     if (repeatThis === repeatEnd) {
+    //       returnRepeat = `0-1-${repeatEnd}`
+    //       return res.json({ repeatId, type, description, value, expirationDay, status, year, month, returnRepeat });
+    //     }
+    //   }
+    // } catch (err) {
+    //   if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
+    //   return res.status(400).send(err);
+    // }
   }
 
   // async index(req, res) {}
 
   async show(req, res) {
     try {
-      const user = await Transaction.findByPk(req.userId);
-      const { id, name, email } = user;
-      return res.json({ id, name, email });
+      const transaction = await Transaction.findByPk(req.transactionId);
+      const { id, type, description, value, expirationDay, status, year, month, repeat } = transaction;
+      return res.json({ type, description, value, expirationDay, status, year, month, repeat });
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);
@@ -36,17 +39,17 @@ class TransactionController {
 
   async update(req, res) {
     try {
-      const user = await Transaction.findByPk(req.userId);
+      const transaction = await Transaction.findByPk(req.transactionId);
 
-      if (!user) {
+      if (!transaction) {
         return res.status(400).json({
-          errors: ['This user does not exist'],
+          errors: ['This transaction does not exist'],
         });
       }
-      const updatedUser = await user.update(req.body);
-      const { id, name, email } = updatedUser;
+      const updatedTransaction = await transaction.update(req.body);
+      const { type, description, value, expirationDay, status, year, month, repeat } = updatedTransaction;
 
-      return res.json({ id, name, email });
+      return res.json({ type, description, value, expirationDay, status, year, month, repeat });
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);
@@ -55,16 +58,16 @@ class TransactionController {
 
   async delete(req, res) {
     try {
-      const user = await Transaction.findByPk(req.userId);
+      const transaction = await Transaction.findByPk(req.transactionId);
 
-      if (!user) {
+      if (!transaction) {
         return res.status(400).json({
-          errors: ['This user does not exist'],
+          errors: ['This transaction does not exist'],
         });
       }
 
-      await user.destroy();
-      return res.json({ userDeleted: true });
+      await transaction.destroy();
+      return res.json({ transactionDeleted: true });
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);

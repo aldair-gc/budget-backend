@@ -18,6 +18,7 @@ const whiteList = [
   'https://www.budget.aldairgc.com',
   'https://budget-server.aldairgc.com',
   'https://www.budget-server.aldairgc.com',
+  'http://localhost:5173',
 ];
 
 const corsOptions = {

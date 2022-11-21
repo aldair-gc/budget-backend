@@ -35,7 +35,6 @@ class TransactionController {
         }
       }
     } catch (err) {
-      console.log(err);
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);
     }
@@ -55,10 +54,9 @@ class TransactionController {
   async show(req, res) {
     try {
       const transaction = await Transaction.findByPk(req.params.id);
-      const { type, description, value, expiration_day, status, year, month, repeat, user_id } = transaction;
       if (user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
 
-      return res.json({ type, description, value, expiration_day, status, year, month, repeat });
+      return res.json(transaction);
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);
@@ -72,9 +70,8 @@ class TransactionController {
       if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
 
       const updatedTransaction = await transaction.update(req.body);
-      const { type, description, value, expiration_day, status, year, month, repeat } = updatedTransaction;
 
-      return res.json({ type, description, value, expiration_day, status, year, month, repeat });
+      return res.json(updatedTransaction);
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);

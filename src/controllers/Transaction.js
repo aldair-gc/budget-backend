@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Transaction from '../models/Transaction';
 
 class TransactionController {
@@ -54,9 +55,21 @@ class TransactionController {
   async show(req, res) {
     try {
       const transaction = await Transaction.findByPk(req.params.id);
-      if (user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
+      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
 
-      return res.json(transaction);
+      const fatherTransaction = transaction.repeat.split("-")[0] === "0" ? req.params.id : transaction.repeat.split("-")[0];
+
+      const repeatitions = await Transaction.findAll({
+        where: {
+          user_id: req.userId,
+          [Op.or]: [
+            { id: fatherTransaction },
+            { repeat: { [Op.startsWith]: `${fatherTransaction}-` }},
+          ]
+        }
+      })
+
+      return res.json(repeatitions);
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);

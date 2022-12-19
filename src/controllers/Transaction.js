@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, Sequelize } from 'sequelize';
 import Transaction from '../models/Transaction';
 
 class TransactionController {
@@ -46,6 +46,41 @@ class TransactionController {
       const { year, month } = req.params;
       const thisMonth = await Transaction.findAll({ where: { user_id: req.userId, year, month } });
       return res.json(thisMonth);
+    } catch (err) {
+      if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
+      return res.status(400).send(err);
+    }
+  }
+
+  async summary(req, res) {
+
+    function previousDate(date) {
+      const previousYear = date.month === 1 ? date.year - 1 : date.year;
+      const previousMonth = date.month === 1 ? 12 : date.month - 1;
+      return {year: previousYear, month: previousMonth};
+    }
+
+    try {
+      const { year, month } = req.params;
+      const summaryList = [];
+      const prevDateToQuery = previousDate({ year, month });
+      do {
+        const monthTotals = await Transaction.findAll({
+          where: { user_id: req.userId, year: prevDateToQuery.year, month: prevDateToQuery.month },
+          attributes: ["year", "month", "type", [Sequelize.fn("sum", Sequelize.col("value")), "total"]],
+          group: "type",
+        });
+        console.log(monthTotals);
+        if (monthTotals.length !== 0) {
+          summaryList.unshift(monthTotals);
+          const newDate = previousDate(prevDateToQuery);
+          prevDateToQuery.year = newDate.year;
+          prevDateToQuery.month = newDate.month;
+        } else {
+          prevDateToQuery.year = 0;
+        }
+      } while (prevDateToQuery.year !== 0);
+      return res.json(summaryList);
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
       return res.status(400).send(err);

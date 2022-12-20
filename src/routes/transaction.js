@@ -4,7 +4,7 @@ import loginRequired from '../middlewares/loginRequired';
 
 const transactionRouter = new Router();
 
-transactionRouter.get('/sum-until/:year/:month', loginRequired, transactionController.summary);
+transactionRouter.get('/sum-until/:year/:month', loginRequired, transactionController.sumUntil);
 transactionRouter.get('/:year/:month', loginRequired, transactionController.index);
 transactionRouter.get('/:id', loginRequired, transactionController.show);
 transactionRouter.post('/', loginRequired, transactionController.store);

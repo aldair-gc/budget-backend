@@ -52,7 +52,7 @@ class TransactionController {
     }
   }
 
-  async summary(req, res) {
+  async sumUntil(req, res) {
 
     function previousDate(date) {
       const previousYear = date.month === 1 ? date.year - 1 : date.year;
@@ -70,7 +70,6 @@ class TransactionController {
           attributes: ["year", "month", "type", [Sequelize.fn("sum", Sequelize.col("value")), "total"]],
           group: "type",
         });
-        console.log(monthTotals);
         if (monthTotals.length !== 0) {
           summaryList.unshift(monthTotals);
           const newDate = previousDate(prevDateToQuery);

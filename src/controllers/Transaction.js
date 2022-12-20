@@ -63,7 +63,6 @@ class TransactionController {
     try {
       const { year, month } = req.params;
       const summaryList = [];
-      console.log(req.params, year, month);
       const prevDateToQuery = previousDate({ year, month });
       do {
         const monthTotals = await Transaction.findAll({

@@ -1,6 +1,6 @@
 class HomeController {
   index(req, res) {
-    res.send('SERVER ONLINE');
+    res.send("SERVER ONLINE");
   }
 }
 

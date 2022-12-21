@@ -1,7 +1,7 @@
-import Sequelize from 'sequelize';
-import databaseConfig from '../config/database';
-import User from '../models/User';
-import Transaction from '../models/Transaction';
+import Sequelize from "sequelize";
+import databaseConfig from "../config/database";
+import User from "../models/User";
+import Transaction from "../models/Transaction";
 
 const models = [User, Transaction];
 

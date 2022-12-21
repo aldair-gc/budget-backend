@@ -1,24 +1,24 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
-import './database';
+import "./database";
 
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
 // import helmet from 'helmet';
 
-import homeRouter from './routes/home';
-import userRouter from './routes/user';
-import transactionRouter from './routes/transaction';
-import tokenRouter from './routes/token';
+import homeRouter from "./routes/home";
+import userRouter from "./routes/user";
+import transactionRouter from "./routes/transaction";
+import tokenRouter from "./routes/token";
 
 const whiteList = [
-  'https://budget.aldairgc.com',
-  'https://www.budget.aldairgc.com',
-  'https://budget-server.aldairgc.com',
-  'https://www.budget-server.aldairgc.com',
-  'http://localhost:5173',
+  "https://budget.aldairgc.com",
+  "https://www.budget.aldairgc.com",
+  "https://budget-server.aldairgc.com",
+  "https://www.budget-server.aldairgc.com",
+  "http://localhost:5173",
 ];
 
 const corsOptions = {
@@ -26,10 +26,10 @@ const corsOptions = {
     if (whiteList.indexOf(origin) !== -1 || !origin) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS (agc)'));
+      callback(new Error("Not allowed by CORS (agc)"));
     }
   },
-}
+};
 
 class App {
   constructor() {
@@ -46,10 +46,10 @@ class App {
   }
 
   routes() {
-    this.app.use('/', homeRouter);
-    this.app.use('/user/', userRouter);
-    this.app.use('/transaction/', transactionRouter);
-    this.app.use('/token/', tokenRouter);
+    this.app.use("/", homeRouter);
+    this.app.use("/user/", userRouter);
+    this.app.use("/transaction/", transactionRouter);
+    this.app.use("/token/", tokenRouter);
   }
 }
 

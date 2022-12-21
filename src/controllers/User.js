@@ -1,4 +1,4 @@
-import User from '../models/User';
+import User from "../models/User";
 
 class UserController {
   async store(req, res) {
@@ -14,7 +14,7 @@ class UserController {
 
   async index(req, res) {
     try {
-      const users = await User.findAll({ attributes: ['id', 'name', 'email'] });
+      const users = await User.findAll({ attributes: ["id", "name", "email"] });
       return res.json(users);
     } catch (err) {
       if (err.errors) return res.status(400).json({ errors: err.errors.map((e) => e.message) });
@@ -39,7 +39,7 @@ class UserController {
 
       if (!user) {
         return res.status(400).json({
-          errors: ['This user does not exist'],
+          errors: ["This user does not exist"],
         });
       }
       const updatedUser = await user.update(req.body);
@@ -58,7 +58,7 @@ class UserController {
 
       if (!user) {
         return res.status(400).json({
-          errors: ['This user does not exist'],
+          errors: ["This user does not exist"],
         });
       }
 

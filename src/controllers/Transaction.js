@@ -1,28 +1,37 @@
-import { Op, Sequelize } from 'sequelize';
-import Transaction from '../models/Transaction';
+/* eslint-disable prefer-const, no-underscore-dangle, camelcase, no-plusplus, no-await-in-loop, consistent-return */
+import { Op, Sequelize } from "sequelize";
+import Transaction from "../models/Transaction";
 
 class TransactionController {
   // first repeat send as "0-1-'total'" and others as "id-'this'-'total'".
   async store(req, res) {
-
     try {
       const { type, description, value, expiration_day, status, year, month, repeat } = req.body;
-      let [ repeatId, repeatThis, repeatEnd ] = repeat.split('-').map(x => Number(x));
+      let [repeatId, repeatThis, repeatEnd] = repeat.split("-").map((x) => Number(x));
       let _month = month;
       let _year = year;
       for (repeatThis; repeatThis <= repeatEnd; repeatThis++) {
         const thisRepeat = `${repeatId}-${repeatThis}-${repeatEnd}`;
-        const newtrasac = await Transaction.create({ type, description, value, expiration_day, status, year: _year, month: _month, repeat: thisRepeat, user_id: req.userId });
+        const newtrasac = await Transaction.create({
+          type,
+          description,
+          value,
+          expiration_day,
+          status,
+          year: _year,
+          month: _month,
+          repeat: thisRepeat,
+          user_id: req.userId,
+        });
         const { id } = newtrasac;
         if (_month < 12) {
-          _month++
+          _month++;
         } else {
           _month = 1;
           _year++;
         }
         if (repeatThis === 1) repeatId = id;
         if (repeatThis === repeatEnd) {
-          const returnRepeat = `0-1-${repeatEnd}`
           return res.json({
             id: repeatId,
             type: newtrasac.type,
@@ -32,7 +41,8 @@ class TransactionController {
             status: newtrasac.status,
             year: newtrasac.year,
             month: newtrasac.month,
-            repeat: returnRepeat });
+            repeat: `0-1-${repeatEnd}`,
+          });
         }
       }
     } catch (err) {
@@ -53,11 +63,10 @@ class TransactionController {
   }
 
   async sumUntil(req, res) {
-
     function previousDate(date) {
-      const previousYear = parseInt(date.month) === 1 ? date.year - 1 : date.year;
-      const previousMonth = parseInt(date.month) === 1 ? 12 : date.month - 1;
-      return {year: previousYear, month: previousMonth};
+      const previousYear = parseInt(date.month, 10) === 1 ? date.year - 1 : date.year;
+      const previousMonth = parseInt(date.month, 10) === 1 ? 12 : date.month - 1;
+      return { year: previousYear, month: previousMonth };
     }
 
     try {
@@ -89,19 +98,16 @@ class TransactionController {
   async show(req, res) {
     try {
       const transaction = await Transaction.findByPk(req.params.id);
-      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
+      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ["Request denied for security reasons"] });
 
       const fatherTransaction = transaction.repeat.split("-")[0] === "0" ? req.params.id : transaction.repeat.split("-")[0];
 
       const repeatitions = await Transaction.findAll({
         where: {
           user_id: req.userId,
-          [Op.or]: [
-            { id: fatherTransaction },
-            { repeat: { [Op.startsWith]: `${fatherTransaction}-` }},
-          ]
-        }
-      })
+          [Op.or]: [{ id: fatherTransaction }, { repeat: { [Op.startsWith]: `${fatherTransaction}-` } }],
+        },
+      });
 
       return res.json(repeatitions);
     } catch (err) {
@@ -113,8 +119,8 @@ class TransactionController {
   async update(req, res) {
     try {
       const transaction = await Transaction.findByPk(req.params.id);
-      if (!transaction) return res.status(400).json({ errors: ['This transaction does not exist'] });
-      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
+      if (!transaction) return res.status(400).json({ errors: ["This transaction does not exist"] });
+      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ["Request denied for security reasons"] });
 
       const updatedTransaction = await transaction.update(req.body);
 
@@ -129,8 +135,8 @@ class TransactionController {
     try {
       const transaction = await Transaction.findByPk(req.params.id);
 
-      if (!transaction) return res.status(400).json({ errors: ['This transaction does not exist'] });
-      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ['Request denied for security reasons']});
+      if (!transaction) return res.status(400).json({ errors: ["This transaction does not exist"] });
+      if (transaction.user_id !== req.userId) return res.status(401).json({ errors: ["Request denied for security reasons"] });
 
       await transaction.destroy();
       return res.json({ transactionDeleted: true });

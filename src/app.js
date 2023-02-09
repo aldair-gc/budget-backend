@@ -12,6 +12,7 @@ import homeRouter from "./routes/home";
 import userRouter from "./routes/user";
 import transactionRouter from "./routes/transaction";
 import tokenRouter from "./routes/token";
+import passwordRouter from "./routes/password";
 
 const whiteList = [
   "https://budget.aldairgc.com",
@@ -50,6 +51,7 @@ class App {
     this.app.use("/user/", userRouter);
     this.app.use("/transaction/", transactionRouter);
     this.app.use("/token/", tokenRouter);
+    this.app.use("/password/", passwordRouter);
   }
 }
 

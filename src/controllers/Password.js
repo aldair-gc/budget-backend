@@ -12,17 +12,17 @@ class PasswordController {
 
     if (registeredEmail) {
       const transporter = nodemailer.createTransport({
-        host: "smtp.hostinger.com",
-        port: 465,
+        host: process.env.MAIL_HOST,
+        port: process.env.MAIL_PORT,
         secure: true,
         auth: {
-          user: "contato@aldairgc.com",
-          pass: "W@3e0poi@!!;,,8hGDer",
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASSWORD,
         },
       });
 
       const mailOptions = {
-        from: "'Aldair Garros Carvalho', <contato@aldairgc.com>",
+        from: `'Aldair Garros Carvalho', <${process.env.MAIL_USER}>`,
         to: email,
         subject: "Budget Password Reset",
         // eslint-disable-next-line no-multi-str

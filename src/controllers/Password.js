@@ -31,7 +31,7 @@ class PasswordController {
         <h2>Create a new password</h2> \
         <p>This email was sent due to a password reset request.</p> \
         <p>This link will only be valid for 10 minutes. If it's already expired, you have to request a new one.</p> \
-        <a href="https://budget.aldairgc.com/?email=${email}&code=${confirmationCode}&loginopt=4" \
+        <a href="https://budget.aldairgarros.com/?email=${email}&code=${confirmationCode}&loginopt=4" \
         style="padding: 5px; background: #555; border-radius: 5px; text-decoration: none; color: #eee;">Create new password</a> \
         <p>Thank you for using our webapp!</p> \
         <p style="border-top: 20px;">Aldair Garros</p> \

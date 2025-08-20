@@ -15,10 +15,10 @@ import tokenRouter from "./routes/token";
 import passwordRouter from "./routes/password";
 
 const whiteList = [
-  "https://budget.aldairgc.com",
-  "https://www.budget.aldairgc.com",
-  "https://budget-server.aldairgc.com",
-  "https://www.budget-server.aldairgc.com",
+  "https://budget.aldairgarros.com",
+  "https://www.budget.aldairgarros.com",
+  "https://budget-server.aldairgarros.com",
+  "https://www.budget-server.aldairgarros.com",
   "http://localhost:5173",
 ];
 
